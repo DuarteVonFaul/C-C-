@@ -4,6 +4,7 @@ class Node{
 	
 	private:
 		Node* next;
+		Node* back;
 		int element;
 	public:
 		//Constructor
@@ -11,9 +12,14 @@ class Node{
 		{
 			this->element = e;
 			this->next = NULL;
+			this->back = NULL;
 		}
 		
 	//getters
+		Node* getBack()
+		{
+			return back;
+		}
 		Node* getNext()
 		{
 			return next;
@@ -25,6 +31,10 @@ class Node{
 		}
 		
 	//setters
+		void setBack(Node* n)
+		{
+			back = n;
+		}
 		void setNext(Node* n)
 		{
 			next = n;
