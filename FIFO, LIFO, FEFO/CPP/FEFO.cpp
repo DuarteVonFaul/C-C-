@@ -108,25 +108,34 @@ class FEFO{
 			if(!empty()){
 				Entity* aux = end;
 				for(int i=0; i<len; i++){
-					if(aux->getPriority() < aux->getBack()->getPriority()){	
+					cout << "Aqui" << endl;
+					if(aux->getPriority() < aux->getBack()->getPriority()){
+						cout << "Priority menor" << endl;	
 						aux = aux->getBack();
+						break;
 					}
 					else if(aux->getPriority() == aux->getBack()->getPriority()){
+						cout << "Priority Igual" << endl;
 						if(aux->getPos() > aux->getBack()->getPos()){
+							cout << "Pos maior" << endl;
 							aux = aux->getBack();
+							break;
 						}
 					}
 				}
 				if(aux->getNext() == NULL){
+					cout << "NULL Next"  << endl;
 					aux->getBack()->setNext(NULL);
 					end = aux->getBack();
 					
 					
 				}else if(aux->getBack() == NULL){
+					cout << "NULL Back"  << endl;
 					aux->getNext()->setBack(NULL);
 					first = aux->getNext();
 					
 				}else{
+					cout << "Not Null" << endl;
 					aux->getBack()->setNext(aux->getNext());
 					aux->getNext()->setBack(aux->getBack());
 				}
@@ -187,8 +196,10 @@ class FEFO{
 
 int main(){
 	FEFO f = FEFO(1,3);
-	f.addEntity(2,3);
-	f.addEntity(3,4);
+	f.addEntity(2,4);
+	f.addEntity(3,3);
+	f.addEntity(4,3);
+	f.addEntity(5,4);
 	f.printALL();
 	cout << "-----------------" << endl;
 	f.removeEntity();
@@ -197,6 +208,10 @@ int main(){
 	f.removeEntity();
 	f.printALL();
 	cout << "-----------------" << endl;
+	f.removeEntity();
+	f.printALL();
+	cout << "-----------------" << endl;
+	
 	
 	
 	
