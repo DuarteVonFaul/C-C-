@@ -103,49 +103,63 @@ class FEFO{
 				cout << "FIFO está Cheio" << endl;
 			}	
 		}
-		
+		//-------------------------------------------------------------------------
+		/*
+		Tive um Pequeno proble no desenvolvimento da funcionalidade de remover uma entidade por ela estava muito robusta
+		e de alta complexidade então a solução que encontrei foi Dividir para conquistar, assim fiz uma funcionalidade
+		que analisa os pesos das entidades e me retorna o que está em maior condição de ser removida e logo em seguida
+		uma outra que analisa a situação dela em relação às outras e a remove de uma maneira que não perde conexão das outras
+		entidades que ainda esperam a serem removidas
+		*/
 		void removeEntity(){//Remover Entity do FEFO	
-			if(!empty()){
-				Entity* aux = end;
-				for(int i=0; i<len; i++){
-					cout << "Aqui" << endl;
-					if(aux->getPriority() < aux->getBack()->getPriority()){
-						cout << "Priority menor" << endl;	
-						aux = aux->getBack();
-						break;
-					}
-					else if(aux->getPriority() == aux->getBack()->getPriority()){
-						cout << "Priority Igual" << endl;
-						if(aux->getPos() > aux->getBack()->getPos()){
-							cout << "Pos maior" << endl;
-							aux = aux->getBack();
-							break;
-						}
-					}
-				}
-				if(aux->getNext() == NULL){
-					cout << "NULL Next"  << endl;
-					aux->getBack()->setNext(NULL);
-					end = aux->getBack();
-					
-					
-				}else if(aux->getBack() == NULL){
-					cout << "NULL Back"  << endl;
-					aux->getNext()->setBack(NULL);
-					first = aux->getNext();
-					
-				}else{
-					cout << "Not Null" << endl;
-					aux->getBack()->setNext(aux->getNext());
-					aux->getNext()->setBack(aux->getBack());
-				}
+			Entity* entity = this->removeEntity(this->end, this->end->getBack());
+			
+			if(entity->getNext() == NULL){
+				cout << "NULL Next"  << endl;
+				entity->getBack()->setNext(NULL);
+				end = entity->getBack();
+
 				
-				delete aux;
-				len--;
 				
+			}else if(entity->getBack() == NULL){
+				cout << "NULL Back"  << endl;
+				entity->getNext()->setBack(NULL);
+				first = entity->getNext();
+
+				
+			}else{
+				cout << "Not Null" << endl;
+				entity->getBack()->setNext(entity->getNext());
+				entity->getNext()->setBack(entity->getBack());
+
 			}
+			
+			delete entity;
+			len--;
+			return;
 		}
 		
+		Entity* removeEntity(Entity* entity, Entity* back_entity){//Remover Entity do FEFO	
+			if(!empty()){
+				if(back_entity != NULL){
+					cout << "Aqui" << endl;
+					if(entity->getPriority() < back_entity->getPriority()){
+						cout << "Priority menor" << endl;	
+						this->removeEntity(back_entity,back_entity->getBack());
+					}
+					else if(entity->getPriority() == back_entity->getPriority()){
+						cout << "Priority Igual" << endl;
+						if(entity->getPos() > back_entity->getPos()){
+							cout << "Pos maior" << endl;
+							return this->removeEntity(back_entity,back_entity->getBack());
+						}
+					}
+					return this->removeEntity(entity,back_entity->getBack());
+				}
+				return entity;
+			}
+		}
+		//-----------------------------------------------------------------------------------
 		bool empty(){//Retorna se o FEFO é Vazio
 			return (len == 0);
 		}
@@ -211,6 +225,7 @@ int main(){
 	f.removeEntity();
 	f.printALL();
 	cout << "-----------------" << endl;
+	
 	
 	
 	
