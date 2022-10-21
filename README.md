@@ -10,7 +10,10 @@ Esse repositorio vai manter toda a evolução no desenvolvimento na Linguagem C+
       * LIFO(Last in, First out) -> Ultimo a Entrar é o Primeiro a Sair
       * FEFO (First Expired, First out) -> Primeiro a "Ganhar"/"Concluir" é o Primeiro a Sair
   * **Árvore Binária**
-    * Usando os conceitos de Nodes encadeados Aprendido na Seção anterior vamos construir uma Árvore Binária Genérica 
+    * Usando os conceitos de Nodes encadeados Aprendido na Seção anterior vamos construir uma Árvore Binária Genérica
+      * Maior que o Nó Pai é adicionado a Esquerda
+      * Menor que o Nó pai é adicionado a Direita
+      * Sistema de busca
   * **RedBlack**
     * Ainda a Estudar 
   * **AVL**
