@@ -13,70 +13,68 @@ class Tree{
 	public:
 		
 		Tree(int e){
-			Node n = Node(e);
-			root = &n;
+			Node* n = new Node(e);
+			root = n;
+		}
+		//-----------------------addChild Node-----------------------------
+		void addChild(int e){
+			Node* n = new Node(e);
+			addChild(getRoot(), n);
 		}
 		
-		Tree(){
-			root = NULL;
-		}
-		
-		//addChild Node -----------------------------------
-		void addChild(Node* n, Node* child){
-			if(n->getElement() < child->getElement()){
-				cout << "Direita" << endl;
-				if(n->getRight() == NULL){
-					cout << "ADD Direita" << endl;
-					child->setRoot(n);
-					n->setRight(child);
-				}else{
-					cout << "Continuar" << endl;
-					addChild(n->getRight(), child);
-					return;
-				}
-			}else if (n->getElement() > child->getElement()){
-				cout << "Esquerda" << endl;
+		void addChild(Node* n, Node* Child){
+			cout << "___APPEND___" << endl;
+			cout << "ROOT " << n->getElement() << " CHILD " << Child->getElement() << endl;
+			if(n->getElement() < Child->getElement()){
+				cout << "Entrou Esquerda" <<endl;
 				if(n->getLeft() == NULL){
-					cout << "ADD Esquerda" << endl;
-					child->setRoot(n);
-					n->setLeft(child);	
+					cout <<"Add Esquerda" <<endl;
+					Child->setRoot(n);
+					n->setLeft(Child);
 				}else{
-					cout << "Continuar" << endl;
-					addChild(n->getLeft(), child);
-					return;
-				}	
-			}else{
-				cout << "Elemento já existe na Arvore" << endl;
+					cout << "Continua" << endl;
+					addChild(n->getLeft(), Child);
+				}
+			}
+			else if(n->getElement() > Child->getElement()){
+				cout << "Entrou Direita" <<endl;
+				if(n->getRight() == NULL){
+					cout <<"Add Direita" <<endl;
+					Child->setRoot(n);
+					n->setRight(Child);
+				}else{
+					cout << "Continua" << endl;
+					addChild(n->getRight(), Child);
+				}
+			}
+			else{
+				cout << "Elemento já existe" <<endl;
 				return;
 			}
 		}
-		
-		void addChild(int e){
-			Node n = Node(e);
-			if(root != NULL){
-				cout << "Elemento: " << n.getElement() << " Elemento Root: " << root->getElement() << endl;
-				addChild(root,&n);
-			}else{
-				cout << "ROOT: " << e << endl;
-				this->root = &n;
-			}
-		}
-		
-		//Search Node -----------------------------------
+		//----------------------------------------Search Node -----------------------------------
 		Node* search(Node* n, int e){
-			if(n->getElement() < e){
+			cout << "___BUSCA___" << endl;
+			if(n->getElement() > e){
+				cout << "Entrei direita" << endl;
 				if(n->getRight() == NULL){
+					cout << "Element não existe" << endl;
 					return NULL;
 				}else{
+					cout << "Continuar" << endl;
 					search(n->getRight(), e);
 				}
-			}else if (n->getElement() > e){
+			}else if (n->getElement() < e){
+				cout << ("Entrei esquerda") << endl;
 				if(n->getLeft() == NULL){
+					cout << "Element não existe" << endl;
 					return NULL;
 				}else{
+					cout << "Continuar" << endl;
 					search(n->getLeft(), e);
 				}	
 			}else{
+				cout << "Encontrei " << n->getElement() << endl;
 				return n;
 			}
 		}
@@ -85,33 +83,58 @@ class Tree{
 			return search(this->root, e);
 		}
 		
-		//Remove Node -----------------------------------	
+		//--------------------------------------Remove Node -----------------------------------	
 		void remove(Node* n){
+			cout << "___REMOVE___" << endl;
 			if(n->getLeft() != NULL){
+				cout << "EXIST ESQUERDA" << endl;
 				if(n->getRight() != NULL){
+					cout << "EXIST DIREITA" << endl;
 					addChild(n->getLeft(), n->getRight());
 					if(n->getRoot() != NULL){
+						cout << "EXIST ROOT" << endl;
 						if(n->getRoot()->getElement() > n->getElement() ){
 							n->getRoot()->setRight(n->getLeft());
 						}else{
 							n->getRoot()->setLeft(n->getLeft());
 						}
 					}else{
+						cout << "NOT EXIST ROOT" << endl;
+						this->root = n->getLeft();
+					}
+				}else{
+					cout << "NOT EXIST DIREITA" << endl;
+					if(n->getRoot() != NULL){
+						cout << "EXIST ROOT" << endl;
+						if(n->getRoot()->getElement() > n->getElement() ){
+							n->getRoot()->setRight(n->getLeft());
+						}else{
+							n->getRoot()->setLeft(n->getLeft());
+						}
+					}else{
+						cout << "NOT EXIST ROOT" << endl;
 						this->root = n->getLeft();
 					}
 				}
 			}else if(n->getRight() != NULL){
+				cout << "NOT EXIST ESQUERDA" << endl;
+				cout << "EXIST DIREITA" << endl;
 				if(n->getRoot() != NULL){
+					cout << "EXIST ROOT" << endl;
 					if(n->getRoot()->getElement() > n->getElement() ){
 						n->getRoot()->setRight(n->getRight());
 					}else{
 						n->getRoot()->setLeft(n->getRight());
 					}
 				}else{
+					cout << "NOT EXIST ROOT" << endl;
 					this->root = n->getLeft();
 				}
 			}else{
+				cout << "NOT EXIST ESQUERDA" << endl;
+				cout << "NOT EXIST DIREITA" << endl;
 				if(n->getRoot() != NULL){
+					cout << "EXIST ROOT" << endl;
 					if(n->getRoot()->getElement() > n->getElement() ){
 						n->getRoot()->setRight(NULL);
 					}else{
@@ -129,9 +152,6 @@ class Tree{
 				cout << "Elemento não existe" << endl;
 			}
 		}
-		
-		
-	
 		//------------------------------------------------
 		//Getters
 			Node* getRoot(){
@@ -148,11 +168,18 @@ class Tree{
 
 int main(){
 	
-	Tree t = Tree();
-	t.addChild(6);
+	Tree t = Tree(6);
+	cout << t.getRoot()->getElement() << endl;
+	cout << "------SOLICITACAO-------" << endl;
 	t.addChild(8);
+	cout << "------SOLICITACAO-------" << endl;
 	t.addChild(7);
+	cout << "------SOLICITACAO-------" << endl;
 	t.addChild(9);
+	cout << "------SOLICITACAO-------" << endl;
+	t.remove(8);
+	cout << "------SOLICITACAO-------" << endl;
+	t.addChild(8);
 	
 	
 	
